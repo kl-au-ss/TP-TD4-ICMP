@@ -23,9 +23,16 @@ envio = time.time()
 ans, unans = sr(p)
 respuesta = time.time()
 
-# if ans:
-#     rtt = (respuesta - envio) * 1000
-#     print("Respuestas recibidas: " + str(len(ans)) + "\nTiempo: " + str(rtt))
+if ans:
+    rcvd = ""
+    i = 0
+    rtt = (respuesta - envio) * 1000
+    # print("Respuestas recibidas: " + str(len(ans)) + "\nTiempo: " + str(rtt))
+    while (str(ans)[10+i] != " "):
+        rcvd += str(ans)[10+i]
+        i = i + 1
+    # print(ans)
+    # print(ans)
 
-print(ans.sprintf())
+# print(ans)
 # print(ans.summary(lambda s,r: r.sprintf("%IP.src% is alive") ))
