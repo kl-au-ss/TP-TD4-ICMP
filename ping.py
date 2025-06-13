@@ -1,38 +1,50 @@
 # Esto es para el coso de ping
+# Timeout para que se pierdan algunos: 0.00000000000000000000001
 from scapy.all import IP, TCP, Ether, sr1, UDP, DNS, ICMP, sr
 import time
 import statistics
 
-# def paquete():
-#     p = sr(IP(dst="www.slashdot.org")/ICMP(), timeout=3)
-#     return p
+def enviar_paquete(direccion):
+    p = (IP(dst=direccion)/ICMP())
+    envio = time.time()
+    ans, unans = sr(p, timeout=0.00000000000000000000001, verbose=False)
+    respuesta = time.time()
 
-# print(paquete())
+    if ans:
+        rcvd = "Recibido"
+        rtt = (respuesta - envio) * 1000
+        ttl = ans[0][1].ttl
+        len = ans[0][1].len
+        return [rcvd, rtt, ttl, len]
 
-# p = sr1(IP(dst="www.slashdot.org")/ICMP()/"XXXXXXXXXXX")
-# print(p)
-# print(p.show())
+    else:
+        return [0, 0, 0, 0]
 
-# ans, unans = sr(IP(dst="192.168.1.0/24")/ICMP(), timeout=3)
-# print(ans, unans)
+def enviar_varios_paquetes(cantidad, direccion):
+    recibidos = 0
+    total_rtts = []
 
-# p = sr(IP(dst="www.slashdot.org")/ICMP(), timeout=3)
+    for i in range(cantidad):
+        respuesta = enviar_paquete(direccion)
+        print("Paquete numero " + str(i))
+        if respuesta[0] == "Recibido":
+            recibidos += 1
+            total_rtts.append(respuesta[1])
+            print("\tRTT: " + str(respuesta[1]))
+            print("\tTTL: " + str(respuesta[2]))
+            print("\tLongitud: " + str(respuesta[3]))
+        else:
+            print("\tSe perdio el paquete [x]")
 
-p = IP(dst="www.slashdot.org")/ICMP()
-envio = time.time()
-ans, unans = sr(p)
-respuesta = time.time()
+    print("Estadisticas:")
+    print("\tEnviados: " + str(cantidad))
+    print("\tRecibidos: " + str(recibidos))
+    print("\tPerdidos: " + str(cantidad-recibidos))
+    print("\tPorcentaje perdidos: " + str(((cantidad-recibidos)/cantidad)*100) + "%")
+    print("\tPromedio RTT: " + str(statistics.mean(total_rtts)))
+    print("\tRTT Maximo: " +str(max(total_rtts)))
+    print("\tRTT Minimo: " +str(min(total_rtts)))
+    print("\tDesvio estandar del RTT promedio: " +str(statistics.stdev(total_rtts)))
 
-if ans:
-    rcvd = ""
-    i = 0
-    rtt = (respuesta - envio) * 1000
-    # print("Respuestas recibidas: " + str(len(ans)) + "\nTiempo: " + str(rtt))
-    while (str(ans)[10+i] != " "):
-        rcvd += str(ans)[10+i]
-        i = i + 1
-    # print(ans)
-    # print(ans)
 
-# print(ans)
-# print(ans.summary(lambda s,r: r.sprintf("%IP.src% is alive") ))
+enviar_varios_paquetes(20, "8.8.8.8")
