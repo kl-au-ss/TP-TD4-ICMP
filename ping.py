@@ -1,6 +1,6 @@
 # Esto es para el coso de ping
 # Timeout para que se pierdan algunos: 0.00000000000000000000001
-from scapy.all import IP, TCP, Ether, sr1, UDP, DNS, ICMP, sr
+from scapy.all import *
 import time
 import statistics
 
@@ -16,7 +16,7 @@ errores_tipo3 = {
 def ping(direccion):
     p = (IP(dst=direccion)/ICMP())
     envio = time.time()
-    ans, unans = sr(p, timeout=0.00000000000000000000001, verbose=False)
+    ans, unans = sr(p, timeout=5, verbose=False)
     respuesta = time.time()
 
     if ans:
@@ -40,7 +40,7 @@ def enviar_varios_ping(cantidad, direccion):
 
     for i in range(cantidad):
         respuesta = ping(direccion)
-        print("Paquete numero " + str(i))
+        print("Paquete numero " + str(i+1))
         if respuesta[0] == True:
             if respuesta[4] == 0:
                 recibidos += 1
@@ -68,5 +68,6 @@ def enviar_varios_ping(cantidad, direccion):
     else:
         print("\tRTT no calculable")
 
-
-enviar_varios_ping(80, "8.8.8.8")
+direccion = str(input("Ingresar direccion para ping: "))
+cant = int(input("Ingresar cantidad: "))
+enviar_varios_ping(cant, direccion)
