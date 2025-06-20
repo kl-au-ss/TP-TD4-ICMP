@@ -9,8 +9,18 @@ errores_tipo3 = {
     1: "Destination host unreachable",
     2: "Destination protocol unreachable",
     3: "Destination port unreachable",
+    4: "Fragmentation was needed and don't fragment was set",
+    5: "Source route failed",
     6: "Destination network unknown",
-    7: "Destination host unknown"
+    7: "Destination host unknown",
+    8: "Source host isolated",
+    9: "Communication with destination network is administratively prohibited",
+    10: "Communication with destintation host is administratively prohibited",
+    11: "Destination network unreachable for type of service",
+    12: "Destination host unreachable for type of service",
+    13: "Communication administratively prohibited",
+    14: "Host precedence violation",
+    15: "Precedence cutoff in effect"
 }
 
 def ping(direccion):
