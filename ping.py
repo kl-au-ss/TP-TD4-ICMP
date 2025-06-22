@@ -30,10 +30,10 @@ def ping(direccion):
     respuesta = time.time()
 
     if ans:
+        rcvd = True
+        rtt = (respuesta - envio) * 1000
         mensaje = ans[0][1].type, ans[0][1].code
         if mensaje[0] == 0:
-            rcvd = True
-            rtt = (respuesta - envio) * 1000
             ttl = ans[0][1].ttl
             len = ans[0][1].len
             return [rcvd, rtt, ttl, len, 0, 0]
