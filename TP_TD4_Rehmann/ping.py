@@ -1,5 +1,3 @@
-# Esto es para el coso de ping
-# Timeout para que se pierdan algunos: 0.00000000000000000000001
 from scapy.all import *
 import time
 import statistics
